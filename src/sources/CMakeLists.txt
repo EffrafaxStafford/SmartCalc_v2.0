@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.28)	# Проверка версии CMake
 set(CMAKE_OSX_DEPLOYMENT_TARGET "14.0" CACHE STRING "Minimum OS X deployment version")
 
 project(SmartCalc VERSION 2.0 LANGUAGES CXX)	# Название проекта
-
-set(CMAKE_CXX_STANDARD 17)	# Стандарт C++17
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17) # Стандарт C++17
+SET(MYCOMPILE_FLAGS "-c -Wall -Wextra -Werror -std=c++17 -pedantic")
+add_definitions(${MYCOMPILE_FLAGS})
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -15,9 +15,7 @@ find_package(Qt6 COMPONENTS Widgets REQUIRED)	# Импортировать мо�
 add_subdirectory(qcustomplot) # здесь добавляется подпапка qcustomplot
 
 set(SOURCE_EXE main.cpp model.cpp view.cpp controller.cpp)	# Установка переменной со списком исходников для исполняемого файла
-
 include_directories(../headers)	# Расположение заголовочных файлов
-
 add_executable(main ${SOURCE_EXE})	# Создает исполняемый файл с именем main
 
 add_dependencies(main qcustomplot)

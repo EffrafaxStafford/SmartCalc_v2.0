@@ -12,8 +12,7 @@ namespace s21 {
 class View : public QMainWindow {
  private:
   double leftX = -10, rightX = 10;
-  double leftY = -10, rightY = 10;
-  double step = 0.1;
+  double step;
 
   Controller *controller;
   QCustomPlot *wGraphic;
@@ -30,8 +29,6 @@ class View : public QMainWindow {
   QHBoxLayout *layout_dwb;
   QLineEdit *lineEdit_leftX;
   QLineEdit *lineEdit_rightX;
-  QLineEdit *lineEdit_leftY;
-  QLineEdit *lineEdit_rightY;
 
   QStatusBar *statusBar;
 
@@ -42,12 +39,14 @@ class View : public QMainWindow {
   void callingSlots();
   void drawGraph();
   void checkAreaXY();
+  bool isBreakpoint(QVector<double> &y);
+  // bool correctionStep(double &X, double Y);
 
  private slots:
   void settingGraph();
 
  public:
-  View(Controller *c = nullptr, QWidget *parent = nullptr);
+  View(QWidget *parent = nullptr, Controller *c = nullptr);
   ~View(){};
 };
 

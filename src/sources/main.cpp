@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   s21::Model m("0");
   s21::Controller c(&m);
-  s21::View v(&c);
+  s21::View v(nullptr, &c);
   v.show();
   return a.exec();
 }

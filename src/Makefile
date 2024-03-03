@@ -52,10 +52,10 @@ tests:
 rebuild: clean all
 
 lintc:
-	@clang-format -n *.cpp
+	@clang-format -n $(SOURCE_DIR)/*.cpp $(TSOURCE_DIR)/*.cpp
 
 linth:
-	@clang-format -n *.h
+	@clang-format -n $(HEADER_DIR)/*.h
 
 leaks:
 	@leaks -atExit -- ./$(INSTALL_DIR)/$(EXECUTABLE) | grep LEAK:
