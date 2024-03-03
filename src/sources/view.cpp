@@ -40,7 +40,7 @@ void s21::View::createDockWidgetTop() {
   dockWidgetTop->setTitleBarWidget(widget_dwt);
 
   lineEdit_func = new QLineEdit(this);
-  layout_dwt->addWidget(new QLabel("y(x): ", this));
+  layout_dwt->addWidget(new QLabel("y(x) = ", this));
   layout_dwt->addWidget(lineEdit_func);
 }
 
@@ -90,14 +90,16 @@ void s21::View::drawGraph() {
     y.push_back(yi);
     for (; X <= rightX; X += step) {
       controller->recalculate(X);
+      correctionStep(X, controller->getResult());
       if (isBreakpoint(y[i])) break;
-      x[i].push_back(X);
-      y[i].push_back(controller->getResult());
+      if (controller->getResult() >= Ymin && controller->getResult() <= Ymax) {
+        x[i].push_back(X);
+        y[i].push_back(controller->getResult());
+      }
     }
     wGraphic->addGraph();
     wGraphic->graph(i)->addData(x[i], y[i]);
   }
-  wGraphic->replot();
 }
 
 void s21::View::settingGraph() {
@@ -112,6 +114,7 @@ void s21::View::settingGraph() {
 
     statusBar->clearMessage();
     drawGraph();
+    wGraphic->replot();
     if (!controller->x_is_there())
       statusBar->showMessage(QString::number(controller->getResult()));
   } catch (std::exception &ex) {
@@ -120,7 +123,7 @@ void s21::View::settingGraph() {
 }
 
 void s21::View::checkAreaXY() {
-  if (leftX >= rightX || leftX < -1000000 || rightX > 1000000)
+  if (leftX >= rightX || leftX < Xmin || rightX > Xmax)
     throw std::runtime_error(
         "Incorrect input: check the function definition area.");
 }
@@ -129,4 +132,19 @@ bool s21::View::isBreakpoint(QVector<double> &y) {
   return (!y.empty() && (abs(controller->getResult() - y.back()) > 10) &&
           ((controller->getResult() < 0 && y.back() > 0) ||
            (controller->getResult() > 0 && y.back() < 0)));
+}
+
+void s21::View::correctionStep(double X, double Y) {
+  if (leftX >= -100 && rightX <= 100) {
+    controller->recalculate(X + step);
+    while (abs(Y - controller->getResult()) > 10 && step > 0.0001) {
+      step /= 2;
+      controller->recalculate(X + step);
+    }
+    while (abs(Y - controller->getResult()) < 1 && step < 0.01) {
+      step *= 2;
+      controller->recalculate(X + step);
+    }
+    controller->recalculate(X);
+  }
 }

@@ -9,6 +9,11 @@
 
 namespace s21 {
 
+#define Xmin -1000000
+#define Xmax 1000000
+#define Ymin -1000000
+#define Ymax 1000000
+
 class View : public QMainWindow {
  private:
   double leftX = -10, rightX = 10;
@@ -40,7 +45,7 @@ class View : public QMainWindow {
   void drawGraph();
   void checkAreaXY();
   bool isBreakpoint(QVector<double> &y);
-  // bool correctionStep(double &X, double Y);
+  void correctionStep(double X, double Y);
 
  private slots:
   void settingGraph();
