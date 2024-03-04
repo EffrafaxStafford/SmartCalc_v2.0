@@ -10,14 +10,17 @@ s21::Model::Model(std::string str, double x_) : infixNotation(str), x(x_) {
 };
 
 void s21::Model::convertUnaryOperators() {
-  if (infixNotation[0] == '-') infixNotation[0] = '~';
-  if (infixNotation[0] == '+') infixNotation[0] = '#';
-  for (size_t i = 0; i < infixNotation.length(); i++) {
-    if (infixNotation[i] == '(' && infixNotation[i + 1] == '-')
-      infixNotation[i + 1] = '~';
-    if (infixNotation[i] == '(' && infixNotation[i + 1] == '+')
-      infixNotation[i + 1] = '#';
-  };
+  unaryOperator(0);
+  for (size_t i = 0; i < infixNotation.length(); i++)
+    if (infixNotation[i] == '(' || infixNotation[i] == '^')
+      unaryOperator(i + 1);
+}
+
+void s21::Model::unaryOperator(size_t pos) {
+  if (infixNotation[pos] == '-')
+    infixNotation[pos] = '~';
+  else if (infixNotation[pos] == '+')
+    infixNotation[pos] = '#';
 }
 
 void s21::Model::changeSubst(const std::string substr1,

@@ -24,6 +24,7 @@ class Model {
   // 'q' - sqrt, 'l' - ln, 'L' - log
 
   void convertUnaryOperators();
+  void unaryOperator(size_t pos);
   void changeSubst(const std::string substr1, const std::string substr2);
   void convertInfixNotation();
   void checkSyntax();
